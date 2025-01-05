@@ -1,11 +1,13 @@
-
+import React from "react";
+import Navbar from "./components/Navbar";
+// import Footer from "./components/Footer";
 
 const App = () => {
   return (
-    <div>
-      
+    <div className="bg-custom-green w-full h-full">
+      <Navbar />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
