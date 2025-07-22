@@ -6,7 +6,8 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import AboutUs from './components/aboutus';
 import HowItWorks from './components/HowItWorks';
-import ResourcesAndTips from './components/ResourcesAndTips'; 
+import ResourcesAndTips from './components/ResourcesAndTips';
+import SuccessGuide from './components/SuccessGuide'; // Add this import
 
 // Create a layout component that can access the location
 function AppLayout() {
@@ -22,7 +23,8 @@ function AppLayout() {
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/how-it-works" element={<HowItWorks />} />
-        <Route path="/students/resources" element={<ResourcesAndTips />} /> {/* Add this route */}
+        <Route path="/students/resources" element={<ResourcesAndTips />} />
+        <Route path="/students/success-guide" element={<SuccessGuide />} /> {/* Add this route */}
         {/* Add other routes as needed */}
       </Routes>
       

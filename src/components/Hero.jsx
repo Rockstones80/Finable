@@ -34,13 +34,13 @@ const Hero = () => {
   const navigate = useNavigate();
 
   // Navigation functions
-  const navigateToSignup = () => {
-    navigate('/auth?mode=signup');
-  };
+  // const navigateToSignup = () => {
+  //   navigate('/auth?mode=signup');
+  // };
 
-  const navigateToLogin = () => {
-    navigate('/auth?mode=login');
-  };
+  // const navigateToLogin = () => {
+  //   navigate('/auth?mode=login');
+  // };
 
   const navigateToDonate = () => {
     // Go to auth page with donate redirect
