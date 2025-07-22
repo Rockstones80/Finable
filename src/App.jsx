@@ -1,13 +1,43 @@
-import React from "react";
-import Navbar from "./components/Navbar";
-// import Footer from "./components/Footer";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import Hero from './components/Hero';
+import AuthPage from './components/AuthPage';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import AboutUs from './components/aboutus';
+import HowItWorks from './components/HowItWorks';
+import ResourcesAndTips from './components/ResourcesAndTips'; 
 
-const App = () => {
+// Create a layout component that can access the location
+function AppLayout() {
+  const location = useLocation();
+  const isAuthPage = location.pathname === '/auth';
+  
   return (
-    <div className="bg-custom-green w-full h-full">
-      <Navbar />
-    </div>
+    <>
+      {!isAuthPage && <Navbar />}
+      
+      <Routes>
+        <Route path="/" element={<Hero />} />
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/how-it-works" element={<HowItWorks />} />
+        <Route path="/students/resources" element={<ResourcesAndTips />} /> {/* Add this route */}
+        {/* Add other routes as needed */}
+      </Routes>
+      
+      {/* Only show footer if not on auth page */}
+      {!isAuthPage && <Footer />}
+    </>
   );
-};
+}
+
+function App() {
+  return (
+    <Router>
+      <AppLayout />
+    </Router>
+  );
+}
 
 export default App;

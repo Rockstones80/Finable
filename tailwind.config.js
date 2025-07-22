@@ -7,7 +7,7 @@ export default {
         "custom-green": "#C2DDB2",
       },
       fontFamily: {
-        Nunito: ['"Nunito"'],
+        Nunito: ['Nunito'],
       },
     },
   },
