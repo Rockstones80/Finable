@@ -37,18 +37,6 @@ const AboutUs = () => {
       bio: "Software engineer passionate about creating secure, scalable platforms that empower communities.",
       avatar: "FA"
     },
-    {
-      name: "Usih Elijah",
-      role: "Head of Community",
-      bio: "Community builder dedicated to connecting dreamers with supporters across Nigeria.",
-      avatar: "TA"
-    }, 
-    {
-        name: "Festus-Osho Oluwatimilehin",
-        role: "Head of Community",
-        bio: "Community builder dedicated to connecting dreamers with supporters across Nigeria.",
-        avatar: "TA"
-      }
   ];
 
   useEffect(() => {
@@ -333,7 +321,7 @@ const AboutUs = () => {
         <section className="py-20 px-4">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-4xl md:text-5xl font-bold text-center text-black mb-16">Meet Our Team</h2>
-            <div className="grid md:grid-cols-3 gap-10">
+            <div className="grid md:grid-cols-3 gap-10 object-center">
               {teamMembers.map((member, index) => (
                 <div key={index} className="bg-white rounded-3xl p-8 shadow-lg text-center glow-effect group">
                   <div className="w-28 h-28 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold text-white group-hover:scale-110 transition-transform duration-300">

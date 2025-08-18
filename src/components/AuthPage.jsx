@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
 import { ArrowRight, Users, Shield, BarChart3, GraduationCap, Heart, Eye, EyeOff, Mail, Lock, User, Phone, ArrowLeft } from 'lucide-react';
-import Button from "./button"
+import { useAuth } from '../App'; // Import the useAuth hook
+import { useNavigate } from 'react-router-dom';
+import Button from "./button";
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -13,6 +17,9 @@ const AuthPage = () => {
     phone: '',
     userType: 'student'
   });
+
+  const { login, signup } = useAuth();
+  const navigate = useNavigate();
 
   // Check URL parameters on component mount to determine initial state
   useEffect(() => {
@@ -31,12 +38,71 @@ const AuthPage = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Clear error when user starts typing
+    if (error) setError('');
   };
 
-  const handleSubmit = (e) => {
+  const validateForm = () => {
+    if (!formData.email || !formData.password) {
+      setError('Email and password are required');
+      return false;
+    }
+
+    if (!isLogin) {
+      if (!formData.fullName) {
+        setError('Full name is required');
+        return false;
+      }
+      
+      if (formData.password !== formData.confirmPassword) {
+        setError('Passwords do not match');
+        return false;
+      }
+      
+      if (formData.password.length < 6) {
+        setError('Password must be at least 6 characters long');
+        return false;
+      }
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Handle authentication logic here
+    
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+    setError('');
+
+    try {
+      let result;
+      
+      if (isLogin) {
+        result = await login(formData.email, formData.password);
+      } else {
+        result = await signup(formData);
+      }
+
+      if (result.success) {
+        // Redirect to dashboard
+        navigate('/dashboard');
+      } else {
+        setError(result.error);
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const toggleAuthMode = () => {
@@ -47,7 +113,7 @@ const AuthPage = () => {
     const newUrl = newMode ? '/auth?mode=login' : '/auth?mode=signup';
     window.history.pushState({}, '', newUrl);
     
-    // Reset form data when switching modes
+    // Reset form data and error when switching modes
     setFormData({
       email: '',
       password: '',
@@ -56,11 +122,20 @@ const AuthPage = () => {
       phone: '',
       userType: 'student'
     });
+    setError('');
   };
 
   const handleBackToHome = () => {
     // Navigate back to landing page
-    window.location.href = '/';
+    navigate('/');
+  };
+
+  const handleDemoLogin = () => {
+    setFormData({
+      ...formData,
+      email: 'ayomideogunsona13@gmail.com',
+      password: 'admin'
+    });
   };
 
   return (
@@ -223,7 +298,34 @@ const AuthPage = () => {
                 }
               </p>
 
-              <div onSubmit={handleSubmit} className="space-y-6">
+              {/* Demo Login Button */}
+              {isLogin && (
+                <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-sm text-blue-700 mb-2">
+                    <strong>Demo Account:</strong>
+                  </p>
+                  <p className="text-sm text-blue-600 mb-3">
+                    Email: ayomideogunsona13@gmail.com<br/>
+                    Password: admin
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleDemoLogin}
+                    className="text-sm bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600 transition-colors"
+                  >
+                    Fill Demo Credentials
+                  </button>
+                </div>
+              )}
+
+              {/* Error Message */}
+              {error && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <p className="text-red-600 text-sm">{error}</p>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-6">
                 {!isLogin && (
                   <>
                     <div className="relative">
@@ -352,9 +454,18 @@ const AuthPage = () => {
                     type="submit"
                     icon={ArrowRight}
                     className="hover:shadow-lg transform"
-                    onClick={handleSubmit}
+                    disabled={isLoading}
                   >
-                    {isLogin ? 'Sign In' : 'Create Account'}
+                    {isLoading ? (
+                      <div className="flex items-center gap-2">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                        {isLogin ? 'Signing In...' : 'Creating Account...'}
+                      </div>
+                    ) : (
+                      <>
+                        {isLogin ? 'Sign In' : 'Create Account'}
+                      </>
+                    )}
                   </Button>
                 </div>
 
@@ -366,7 +477,7 @@ const AuthPage = () => {
                     <button className="text-green-600 hover:underline font-semibold">Privacy Policy</button>
                   </p>
                 )}
-              </div>
+              </form>
 
               <div className="mt-8 text-center">
                 <p className="text-gray-600">
@@ -374,6 +485,7 @@ const AuthPage = () => {
                   <button
                     onClick={toggleAuthMode}
                     className="text-green-600 hover:text-green-700 font-semibold hover:underline"
+                    disabled={isLoading}
                   >
                     {isLogin ? 'Sign up' : 'Sign in'}
                   </button>

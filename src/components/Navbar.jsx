@@ -49,6 +49,12 @@ const Navbar = () => {
     setIsMenuOpen(false); // Close mobile menu if open
   };
 
+  const handleSuccessStories = () => {
+    navigate('/students/success-guide');
+    closeDropdowns();
+    setIsMenuOpen(false); // Close mobile menu if open
+  };
+
   return (
     <header className="header sticky top-0 z-50">
       <nav className="bg-white/95 backdrop-blur-sm w-full shadow-sm border-b border-gray-100 font-sans">
@@ -76,12 +82,12 @@ const Navbar = () => {
               >
                 How It Works
               </a>
-              <a
-                href="/success-stories"
+              <button
+                onClick={handleSuccessStories}
                 className="text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-md hover:bg-gray-50"
               >
                 Success Stories
-              </a>
+              </button>
               <a
                 href="/about"
                 className="text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-md hover:bg-gray-50"
@@ -243,13 +249,12 @@ const Navbar = () => {
                 >
                   How It Works
                 </a>
-                <a
-                  href="/success-stories"
-                  className="block text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors"
-                  onClick={toggleMenu}
+                <button
+                  onClick={handleSuccessStories}
+                  className="block w-full text-left text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors"
                 >
                   Success Stories
-                </a>
+                </button>
                 <a
                   href="/about"
                   className="block text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors"
